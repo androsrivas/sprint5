@@ -1,0 +1,11 @@
+Follow steps from Laravel Passport documentation. Link: https://laravel.com/docs/10.x/passport#installation
+
+1- Composer require
+2- php artisan migrate
+3- php artisan passport:installation
+4- php artisan passport:client --personal
+5- After creating your personal access client, place the client's ID and plain-text secret value in your application's .env file:
+    PASSPORT_PERSONAL_ACCESS_CLIENT_ID="client-id-value"
+    PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="unhashed-client-secret-value"
+
+If you need to run php artisan migrate:fresh, redo step 4 and 5.

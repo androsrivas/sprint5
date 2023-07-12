@@ -15,16 +15,12 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('email')->unique();
             $table->string('nickname')->unique();
-            $table->string('name')->nullable();
             $table->float('win_percentage')->nullable();
-            // $table->unsignedBigInteger('ranking_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-
-            // $table->foreign('ranking_id')->references('id')->on('rankings');
-
+            
         });
     }
 
