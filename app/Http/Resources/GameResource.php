@@ -15,10 +15,10 @@ class GameResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'user' => $this->user_id,
             'dice 1' => $this->dice_1,
             'dice 2' => $this->dice_2,
             'result' => $this->result,
-            'user' => $this->user_id,
             'played' => $this->created_at,
         ];
     }

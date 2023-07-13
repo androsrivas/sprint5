@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Events\newGameStarted;
 use App\Models\Game;
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -27,6 +28,8 @@ class GameController extends Controller
             $game->user_id = $user->id;
             $game->fill($gameResult);
             $game->save();
+
+            event(new newGameStarted($game));
 
             return GameResource::make($game);
         }

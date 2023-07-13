@@ -22,11 +22,8 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('admin123'),
             'remember_token' => Str::random(10),
-        ]);
+        ])/*->assignRole('player')*/;
 
-        User::factory(9)->create();
-        // Ranking::factory(100)->create();
-
-        $this->call(GameSeeder::class);
+        User::factory(5)->create();
     }
 }
