@@ -20,40 +20,30 @@ use App\Http\Controllers\API\v1\PassportAuthController;
 Route::prefix('v1')->group(function () {
 
     //users
-    Route::post('/register', [PassportAuthController::class, 'register']);
-    Route::post('/login', [PassportAuthController::class, 'login']);
+    Route::post('/players', [PassportAuthController::class, 'register'])->name('users.register');
+    Route::post('/login', [PassportAuthController::class, 'login'])->name('users.login')->middleware('role:admin, player');
 
     Route::middleware('auth:api')->group(function () {
 
         //admin
-        Route::get('/players', [UserController::class, 'index']);
-        //Route::get('/players/ranking', []);
+        Route::middleware('role:admin')->group( function () {
+            Route::get('/players', [UserController::class, 'index'])->name('admin.players');
+            //Route::delete('/players/{player}', [UserController::class, 'destroy'])->name('admin.player.delete');
+            //Route::get('/players/ranking', [RankingController::class, 'index'])->name('admin.ranking');
+        });
 
         //players
-        Route::get('/players/{player}/games', [GameController::class, 'show']);
-        Route::put('/players/{player}', [UserController::class, 'update']);
-        Route::delete('/players/{player}/games', [GameController::class, 'destroy']);
-        Route::post('/players/{player}/games', [GameController::class, 'newGame']);
+        Route::middleware('role:player')->group( function () {
+            Route::get('/players/{player}/games', [GameController::class, 'show'])->name('players.games');
+            Route::put('/players/{player}', [UserController::class, 'update'])->name('players.update');
+            Route::post('/players/{player}/games', [GameController::class, 'newGame'])->name('players.newGame');
+            Route::delete('/players/{player}/games', [GameController::class, 'destroy'])->name('players.games.delete');
+        });
     });
 });
 
 /*
-    POST /players : crea un jugador/a.
     GET /players/ranking: retorna el rànquing mitjà de tots els jugadors/es del sistema. És a dir, el percentatge mitjà d’èxits.
     GET /players/ranking/loser: retorna el jugador/a amb pitjor percentatge d’èxit.
     GET /players/ranking/winner: retorna el jugador/a amb millor percentatge d’èxit.
 */ 
-
-/*Route::prefix('v1')->middleware('auth:api')->group(function () {
-    //admin
-    Route::get('/players', [UserController::class, 'index']);
-    // Route::get('/players/ranking/loser', [UserController::class, 'findWinner']);
-    // Route::get('/players/ranking/winner', [UserController::class, 'findLoser']);
-
-    //users
-    Route::get('/players/{id}/games', [UserController::class, 'show']);
-    Route::post('/players', [UserController::class, 'store']);
-    Route::put('/players/{id}', [UserController::class, 'update']);
-    Route::post('/players/{id}/games', [GameController::class, 'throwDice']);
-    Route::delete('/players/{id}/games', [GameController::class, 'destroy']);
-});*/

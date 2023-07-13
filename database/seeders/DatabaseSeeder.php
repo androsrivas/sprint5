@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call(RoleSeeder::class);
+        $this->call(RoleSeeder::class);
         
         User::create([
             'email' => 'admin@example.com', 
@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('admin123'),
             'remember_token' => Str::random(10),
-        ])/*->assignRole('player')*/;
+        ])->assignRole('admin');
 
         User::factory(5)->create();
     }

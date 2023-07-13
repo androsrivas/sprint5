@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\newGameStarted;
+use App\Events\newUserRegistered;
+use App\Listeners\AssignDefaultRole;
 use App\Listeners\updateUserWinPercentage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         newGameStarted::class => [
             updateUserWinPercentage::class,
+        ],
+        newUserRegistered::class => [
+            AssignDefaultRole::class,
         ],
     ];
 
