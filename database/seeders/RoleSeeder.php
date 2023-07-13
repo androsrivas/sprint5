@@ -20,6 +20,8 @@ class RoleSeeder extends Seeder
         //admin routes
         Permission::create(['name' => 'admin.players'])->assignRole($admin);
         Permission::create(['name' => 'admin.ranking'])->assignRole($admin);
+        Permission::create(['name' => 'admin.ranking.winner'])->assignRole('admin');
+        Permission::create(['name' => 'admin.ranking.loser'])->assignRole('admin');
         Permission::create(['name' => 'admin.player.delete'])->assignRole($admin);
 
         //players routes

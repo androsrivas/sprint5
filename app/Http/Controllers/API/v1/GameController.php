@@ -49,6 +49,7 @@ class GameController extends Controller
         return
             [
                 'user' => $user->nickname,
+                'win percentage' => $user->win_percentage,
                 'games' => GameResource::collection($userGames),
             ];
     }

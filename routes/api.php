@@ -29,7 +29,9 @@ Route::prefix('v1')->group(function () {
         Route::middleware('role:admin')->group( function () {
             Route::get('/players', [UserController::class, 'index'])->name('admin.players');
             //Route::delete('/players/{player}', [UserController::class, 'destroy'])->name('admin.player.delete');
-            //Route::get('/players/ranking', [RankingController::class, 'index'])->name('admin.ranking');
+            Route::get('/players/ranking', [RankingController::class, 'showRanking'])->name('admin.ranking');
+            Route::get('/players/ranking/winner', [RankingController::class, 'showWinner'])->name('admin.ranking.winner');
+            Route::get('/players/ranking/loser', [RankingController::class, 'showLoser'])->name('admin.ranking.loser');
         });
 
         //players
