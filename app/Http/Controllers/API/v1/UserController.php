@@ -20,18 +20,6 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(int $id)
-    {
-        if (Auth::user()->id != $id) {
-
-            $user = User::findOrFail($id);
-            
-        }
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(User $user)
@@ -50,8 +38,20 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if (auth()->user()->id !== $user->id) {
+
+            return response('Unauthorized', 401);
+
+        } else {
+        
+            User::where('user', $id)->delete();
+
+            return response()->json(['message' => 'User deleted correctly.'], 200);
+
+        }
     }
 }

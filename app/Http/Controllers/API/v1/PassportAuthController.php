@@ -3,24 +3,32 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 
 class PassportAuthController extends Controller
 {
     public function register(Request $request)
     {
-        $this->validate( $request, [
+        $validator = Validator::make( $request->all(), [
             'email' => 'required|email|max:35',
-            'password' => 'required|current_password|min:8',
+            'password' => 'required|string|min:8',
             'nickname' => 'nullable|string|min:3|max:10',
         ]);
+        
+        if ( $validator->fails()) {
+
+            return response()->json(['errors' => $validator->errors()->all()], 422);
+
+        }
 
         $emailExists = User::where('email', $request->email)->first();
-        $nicknameExists = User::where('nickname', $request->nickname);
+        $nicknameExists = User::where('nickname', 'LIKE', $request->nickname)->first();
 
         if($emailExists) {
             
@@ -40,6 +48,8 @@ class PassportAuthController extends Controller
             'nickname' => $request->nickname ?: 'anonymous-' . rand(100,999),
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(10), 
         ]);
 
         $accessToken = $user->createToken('register')->accessToken;
