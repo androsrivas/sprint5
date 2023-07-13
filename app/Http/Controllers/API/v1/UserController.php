@@ -28,6 +28,7 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
         $user->nickname = $request->nickname;
+        $user->save();
 
         return response()->json([
             'message' => 'Nickname updated successfully.',

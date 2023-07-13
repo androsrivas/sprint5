@@ -20,7 +20,6 @@ class UserFactory extends Factory
         return [
             'email' => fake()->unique()->safeEmail(),
             'nickname' => fake()->optional()->unique()->userName ?? fake()->numerify('anonymous-###'),
-            'win_percentage' => fake()->optional()->randomFloat(1, 0, 100),
             'email_verified_at' => now(),
             'password' => 'password',
             'remember_token' => Str::random(10),
