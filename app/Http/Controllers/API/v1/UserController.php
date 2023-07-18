@@ -14,7 +14,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        return UserResource::collection(User::all());
+        if (auth()->user()) {
+
+            return UserResource::collection(User::all());
+
+        } else {
+
+            return response()->json([
+                'message' => 'Unauthorised.'], 403);
+        }
     }
 
     /**
@@ -23,7 +31,9 @@ class UserController extends Controller
     public function update(Request $request, int $id)
     {
         if (auth()->user()->id != $id ) {
-            return response()->json(['message' => 'Access denied.'], 401);
+
+            return response()->json(['message' => 'Unauthorised.'], 401);
+
         }
 
         $user = User::findOrFail($id);
@@ -41,13 +51,20 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-        // if ( auth()->user()->hasRole('admin')) {
-        //     $user = User::findOrFail($id);
-        //     $user->delete();
+        /** @var \App\Models\User */
+        $admin = auth()->user();
 
-        //     return response()->json(['message' => 'User deleted successfully.'], 200);
-        // } else {
-        //     return response()->json(['message' => 'Unauthorised.'], 401);
-        // }
+        if ( $admin->hasRole('admin')) {
+
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return response()->json(['message' => 'User deleted successfully.'], 200);
+
+        } else {
+
+            return response()->json(['message' => 'Unauthorised.'], 403);
+        
+        }
     }
 }
