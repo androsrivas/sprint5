@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Contracts\Role;
 use App\Http\Controllers\Api\v1\GameController;
 use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\RankingController;
 use App\Http\Controllers\API\v1\PassportAuthController;
 
 /*
@@ -21,14 +23,14 @@ Route::prefix('v1')->group(function () {
 
     //users
     Route::post('/players', [PassportAuthController::class, 'register'])->name('users.register');
-    Route::post('/login', [PassportAuthController::class, 'login'])->name('users.login')->middleware('role:admin, player');
+    Route::post('/login', [PassportAuthController::class, 'login'])->name('users.login');
 
     Route::middleware('auth:api')->group(function () {
 
         //admin
         Route::middleware('role:admin')->group( function () {
             Route::get('/players', [UserController::class, 'index'])->name('admin.players');
-            //Route::delete('/players/{player}', [UserController::class, 'destroy'])->name('admin.player.delete');
+            Route::delete('/players/{player}', [UserController::class, 'destroy'])->name('admin.player.delete');
             Route::get('/players/ranking', [RankingController::class, 'showRanking'])->name('admin.ranking');
             Route::get('/players/ranking/winner', [RankingController::class, 'showWinner'])->name('admin.ranking.winner');
             Route::get('/players/ranking/loser', [RankingController::class, 'showLoser'])->name('admin.ranking.loser');
