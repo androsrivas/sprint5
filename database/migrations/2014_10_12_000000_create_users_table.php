@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('email')->unique();
             $table->string('nickname')->unique()->nullable();
-            $table->float('win_percentage')->nullable();
+            $table->float('win_percentage')->default(00.0)->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
