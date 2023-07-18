@@ -15,9 +15,9 @@ class RankingResource extends UserResource
     public function toArray(Request $request): array
     {
         return [
-            'user id' => $this->id,
+            'user_id' => $this->id,
             'nickname' => $this->nickname,
-            'win percentage' => $this->win_percentage,
+            'win_percentage' => $this->win_percentage,
         ];
     }
 }

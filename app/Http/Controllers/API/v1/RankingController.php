@@ -29,11 +29,11 @@ class RankingController extends Controller
 
     public function showRanking()
     {
-        $avarage = User::avg('win_percentage');
-        $ranking = User::orderByDesc('win_percentage');
+        $average = User::avg('win_percentage');
+        $ranking = User::orderByDesc('win_percentage')->get();
 
         return response()->json([
-            'avarage win percentage' => $avarage,
+            'average_win_percentage' => $average,
             'ranking' => RankingResource::collection($ranking),
         ], 200);
     }
