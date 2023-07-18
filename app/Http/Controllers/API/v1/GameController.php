@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\API\v1;
 
-use App\Events\newGameStarted;
+use App\Events\NewGameStarted;
 use App\Models\Game;
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -38,20 +38,22 @@ class GameController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): array
+    public function show(int $id)
     {
         if (auth()->user()->id != $id) {
-            return response()->json(['message' => 'Unauthorised.'], 401);
+
+            return response()->json(['message' => 'Forbidden.'], 403);
+
         }
+
         $user = User::findOrFail($id);
         $userGames = Game::where('user_id', $user->id)->get();
 
-        return
-            [
-                'user' => $user->nickname,
-                'win percentage' => $user->win_percentage,
-                'games' => GameResource::collection($userGames),
-            ];
+        return response()->json([
+            'user' => $user->nickname,
+            'win percentage' => $user->win_percentage,
+            'games' => GameResource::collection($userGames),
+        ]);
     }
 
     /**
@@ -61,7 +63,8 @@ class GameController extends Controller
     {
         if (auth()->user()->id !== $id) {
 
-            return response()->json(['message' => 'Unauthorised.'], 401);
+            return response()->json(['message' => 'Forbidden.'], 403);
+
         } else {
 
             $user = User::findOrFail($id);
