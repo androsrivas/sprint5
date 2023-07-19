@@ -17,11 +17,11 @@ class UserController extends Controller
         if (auth()->user()) {
 
             return UserResource::collection(User::all());
-
         } else {
 
             return response()->json([
-                'message' => 'Unauthorised.'], 403);
+                'message' => 'Unauthorised.'
+            ], 403);
         }
     }
 
@@ -30,20 +30,28 @@ class UserController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        if (auth()->user()->id != $id ) {
+        if (auth()->user()->id != $id) {
 
             return response()->json(['message' => 'Unauthorised.'], 401);
-
         }
 
         $user = User::findOrFail($id);
-        $user->nickname = $request->nickname;
-        $user->save();
+        $existingNickname = USer::where('nickname', $request->nickname)->get();
 
-        return response()->json([
-            'message' => 'Nickname updated successfully.',
-            'user' => UserResource::make($user),
-        ], 200);       
+        if ($existingNickname) {
+
+            return response()->json(['message' => 'This nickname already exists.'], 400);
+
+        } else {
+            
+            $user->nickname = $request->nickname;
+            $user->save();
+
+            return response()->json([
+                'message' => 'Nickname updated successfully.',
+                'user' => UserResource::make($user),
+            ], 200);
+        }
     }
 
     /**
@@ -54,17 +62,15 @@ class UserController extends Controller
         /** @var \App\Models\User */
         $admin = auth()->user();
 
-        if ( $admin->hasRole('admin')) {
+        if ($admin->hasRole('admin')) {
 
             $user = User::findOrFail($id);
             $user->delete();
 
             return response()->json(['message' => 'User deleted successfully.'], 200);
-
         } else {
 
             return response()->json(['message' => 'Unauthorised.'], 403);
-        
         }
     }
 }
