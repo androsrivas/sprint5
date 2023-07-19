@@ -30,28 +30,23 @@ class UserController extends Controller
      */
     public function update(Request $request, int $id)
     {
-
         if (auth()->user()->id != $id) {
 
             return response()->json(['message' => 'Unauthorised.'], 401);
         }
 
-        $newNickname = $request->validate([
-            'nickname' => 'nullable|string|unique:users,nickname, ' . $id . ',id'
-        ]);
-
         $user = User::findOrFail($id);
 
-        $existingNickname = User::where('nickname', $request->nickname)
+        $nicknameExists = User::where('nickname', $request->nickname)
             ->whereNotNull('nickname')
             ->exists();
         
-        if ($existingNickname) {
+        if ($nicknameExists) {
 
             return response()->json(['message' => 'This nickname already exists.'], 400);
 
         } else {
-            // dd($request->nickname);
+            
             $user->nickname = $request->nickname;
             if($user->save()) {
                 return response()->json([
