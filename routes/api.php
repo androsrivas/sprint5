@@ -27,6 +27,8 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
 
+        Route::post('/logout', [PassportAuthController::class, 'logout'])->name('users.logout');
+
         //admin
         Route::middleware('role:admin')->group( function () {
             Route::get('/players', [UserController::class, 'index'])->name('admin.players');

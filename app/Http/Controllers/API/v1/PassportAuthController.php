@@ -36,7 +36,6 @@ class PassportAuthController extends Controller
             return response()->json([
                 'message' => 'This email already exists.',
             ], 400);
-            
         } else if ($nicknameExists) {
 
             return response()->json([
@@ -51,7 +50,7 @@ class PassportAuthController extends Controller
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);
-            
+
             event(new newUserRegistered($user));
 
             $accessToken = $user->createToken('register')->accessToken;
@@ -86,16 +85,25 @@ class PassportAuthController extends Controller
                 return response()->json([
                     'message' => 'Logged in succesfully',
                     'user' => UserResource::make($user),
-                    'token' => $token], 200);
-
+                    'token' => $token
+                ], 200);
             } else {
 
                 return response()->json(['message' => 'Incorrect password.'], 422);
             }
-
         } else {
 
             return response(['message' => 'User does not exist.'], 422);
         }
+    }
+
+    public function logout()
+    {
+        $token = Auth::user()->token();
+        $token->revoke();
+
+        return response()->json([
+            'message' => 'Succesfully logged out.'
+        ], 200);
     }
 }
