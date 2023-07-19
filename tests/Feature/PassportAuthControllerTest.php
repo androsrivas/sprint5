@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -90,5 +91,15 @@ class PassportAuthControllerTest extends TestCase
         ]);
     
         $response->assertJsonStructure([])->assertStatus(422);
+    }
+
+    public function test_user_can_logout()
+    {
+        $user = User::factory()->create();
+        Passport::actingAs($user);
+
+        $response = $this->postJson(route('users.logout'));
+
+        $response->assertOk();
     }
 }

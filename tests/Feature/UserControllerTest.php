@@ -53,6 +53,23 @@ class UserControllerTest extends TestCase
         ])->assertStatus(401);
     }
 
+    public function test_player_cant_update_nickname_with_existing_nickname()
+    {
+        $user = User::factory()->create()->assignRole('player');
+        Passport::actingAs($user);
+
+        $user->nickname = 'anonymous-234';
+
+        $response = $this->putJson(route('players.update', $user->id), [
+            'nickname' => 'ddddust',
+        ]);
+
+        $response->assertJsonStructure([
+            'message',
+        ])->assertStatus(422);
+
+    }
+
     public function test_admin_can_delete_user()
     {
         $admin = User::factory()->create()->assignRole('admin');

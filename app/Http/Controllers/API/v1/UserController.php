@@ -51,7 +51,6 @@ class UserController extends Controller
             return response()->json(['message' => 'This nickname already exists.'], 400);
 
         } else {
-            // dd($request->nickname);
             $user->nickname = $request->nickname;
             if($user->save()) {
                 return response()->json([
