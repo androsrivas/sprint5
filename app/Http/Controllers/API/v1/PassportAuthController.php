@@ -28,14 +28,15 @@ class PassportAuthController extends Controller
             return response()->json(['errors' => $validator->errors()->all()], 422);
         }
 
-        $emailExists = User::where('email', $request->email)->first();
-        $nicknameExists = User::where('nickname', $request->nickname)->first();
+        $emailExists = User::where('email', $request->email)->exists();
+        $nicknameExists = User::where('nickname', $request->nickname)->exists();
 
         if ($emailExists) {
 
             return response()->json([
                 'message' => 'This email already exists.',
             ], 400);
+            
         } else if ($nicknameExists) {
 
             return response()->json([
