@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Events\newUserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,8 @@ class PassportAuthController extends Controller
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(10),
             ]);
+            
+            event(new newUserRegistered($user));
 
             $accessToken = $user->createToken('register')->accessToken;
 
