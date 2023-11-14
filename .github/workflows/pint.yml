@@ -1,0 +1,35 @@
+name: PHP Linting (Pint)
+on:
+  workflow_dispatch:
+  pull_request:
+jobs:
+  phplint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Pinting
+        uses: aglipanci/laravel-pint-action@2.0.0
+        with:
+          configPath: "pint.json"
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: PHP Linting (Pint)
+          skip_fetch: true
+      - name: Squash Commits
+        run: |
+          git config user.email {{  }}
+          git config user.name {{  }}
+          git checkout develop
+          git pull origin develop
+          git rebase -i HEAD~n
+          git rebase -i --root
+          sed -i '/PHP Linting (Pint)/s/pick/squash' .git/rebase-merge/git-rebase-todo
+          git push origin develop --force
+
+        
