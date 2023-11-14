@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
-use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class PassportAuthControllerTest extends TestCase
 {
@@ -18,13 +16,13 @@ class PassportAuthControllerTest extends TestCase
             'password' => 'password',
             'nickname' => fake()->unique()->userName(),
         ]);
-        
+
         $response->assertJsonStructure([
             'message',
             'user',
             'access_token',
-            ])->assertOk();
-                
+        ])->assertOk();
+
     }
 
     public function test_user_cant_register_with_existing_email()
@@ -34,18 +32,18 @@ class PassportAuthControllerTest extends TestCase
             'password' => 'admin123',
             'nickname' => 'test',
         ]);
-        
+
         $response->assertStatus(400);
     }
-    
+
     public function test_user_cant_register_with_existing_nickname()
     {
         $response = $this->postJson(route('users.register'), [
             'email' => fake()->unique()->email(),
             'password' => 'password',
-            'nickname' => 'admin'
+            'nickname' => 'admin',
         ]);
-        
+
         $response->assertStatus(400);
     }
 
@@ -60,9 +58,9 @@ class PassportAuthControllerTest extends TestCase
             'message',
             'user',
             'access_token',
-            ])->assertOk();
+        ])->assertOk();
     }
-    
+
     public function test_user_can_login()
     {
         $user = User::factory()->create([
@@ -73,23 +71,23 @@ class PassportAuthControllerTest extends TestCase
             'email' => $user->email,
             'password' => 'password',
         ]);
-        
+
         $response->assertJsonStructure([
             'message',
             'user',
             'token',
         ])->assertOk();
     }
-    
+
     public function test_user_cant_login()
     {
         $user = User::factory()->create();
-    
+
         $response = $this->postJson(route('users.login'), [
             'email' => $user->email,
             'password' => 'incorrect_password',
         ]);
-    
+
         $response->assertJsonStructure([])->assertStatus(422);
     }
 

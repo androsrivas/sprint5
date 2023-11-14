@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Events\newUserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 
 class PassportAuthController extends Controller
 {
@@ -36,7 +35,7 @@ class PassportAuthController extends Controller
             return response()->json([
                 'message' => 'This email already exists.',
             ], 400);
-        } else if ($nicknameExists) {
+        } elseif ($nicknameExists) {
 
             return response()->json([
                 'message' => 'This nickname is already taken.',
@@ -44,7 +43,7 @@ class PassportAuthController extends Controller
         } else {
 
             $user = User::create([
-                'nickname' => $request->nickname ?: 'anonymous-' . rand(100, 999),
+                'nickname' => $request->nickname ?: 'anonymous-'.rand(100, 999),
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'email_verified_at' => now(),
@@ -85,7 +84,7 @@ class PassportAuthController extends Controller
                 return response()->json([
                     'message' => 'Logged in succesfully',
                     'user' => UserResource::make($user),
-                    'token' => $token
+                    'token' => $token,
                 ], 200);
             } else {
 
@@ -103,7 +102,7 @@ class PassportAuthController extends Controller
         $token->revoke();
 
         return response()->json([
-            'message' => 'Succesfully logged out.'
+            'message' => 'Succesfully logged out.',
         ], 200);
     }
 }

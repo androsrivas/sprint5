@@ -2,12 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
 use Laravel\Passport\Passport;
-use App\Http\Resources\UserResource;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
@@ -31,7 +28,7 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->create()->assignRole('player');
         Passport::actingAs($user);
-        
+
         $response = $this->putJson(route('players.update', $user->id), [
             'email' => fake()->unique()->email(),
             'password' => 'password',
@@ -43,11 +40,11 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->create()->assignRole('player');
         Passport::actingAs($user);
-        
-        $response = $this->putJson(route('players.update', $user->id-1), [
+
+        $response = $this->putJson(route('players.update', $user->id - 1), [
             'nickname' => 'new_nickname',
         ]);
-        
+
         $response->assertJsonStructure([
             'message',
         ])->assertStatus(401);
@@ -77,7 +74,7 @@ class UserControllerTest extends TestCase
         Passport::actingAs($admin);
 
         $response = $this->deleteJson(route('admin.player.delete', ['player' => $userToDelete->id]));
-        
+
         $response->assertOk();
 
         $this->assertDatabaseMissing('users', ['id' => $userToDelete->id]);

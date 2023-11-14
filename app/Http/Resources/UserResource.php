@@ -20,5 +20,6 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'win percentage' => $this->win_percentage,
             'created at' => $this->created_at,
-        ];    }
+        ];
+    }
 }

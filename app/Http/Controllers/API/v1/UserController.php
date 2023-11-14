@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -20,7 +20,7 @@ class UserController extends Controller
         } else {
 
             return response()->json([
-                'message' => 'Unauthorised.'
+                'message' => 'Unauthorised.',
             ], 403);
         }
     }
@@ -40,15 +40,15 @@ class UserController extends Controller
         $nicknameExists = User::where('nickname', $request->nickname)
             ->whereNotNull('nickname')
             ->exists();
-        
+
         if ($nicknameExists) {
 
             return response()->json(['message' => 'This nickname already exists.'], 400);
 
         } else {
-            
+
             $user->nickname = $request->nickname;
-            if($user->save()) {
+            if ($user->save()) {
                 return response()->json([
                     'message' => 'Nickname updated successfully.',
                     'user' => UserResource::make($user),

@@ -2,11 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
 use Laravel\Passport\Passport;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class GameControllerTest extends TestCase
 {
@@ -30,7 +28,7 @@ class GameControllerTest extends TestCase
         $response->assertJsonStructure([
             'user',
             'win percentage',
-            'games'
+            'games',
         ])->assertOk();
     }
 
@@ -41,7 +39,7 @@ class GameControllerTest extends TestCase
         Passport::actingAs($player1);
 
         $response = $this->getJson(route('players.games', ['player' => $player2->id]));
-        
+
         $response->assertStatus(403);
     }
 

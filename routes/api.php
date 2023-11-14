@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Spatie\Permission\Contracts\Role;
 use App\Http\Controllers\Api\v1\GameController;
-use App\Http\Controllers\API\v1\UserController;
-use App\Http\Controllers\API\v1\RankingController;
 use App\Http\Controllers\API\v1\PassportAuthController;
+use App\Http\Controllers\API\v1\RankingController;
+use App\Http\Controllers\API\v1\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +17,6 @@ use App\Http\Controllers\API\v1\PassportAuthController;
 |
 */
 
-
 Route::prefix('v1')->group(function () {
 
     //users
@@ -30,7 +28,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/logout', [PassportAuthController::class, 'logout'])->name('users.logout');
 
         //admin
-        Route::middleware('role:admin')->group( function () {
+        Route::middleware('role:admin')->group(function () {
             Route::get('/players', [UserController::class, 'index'])->name('admin.players');
             Route::delete('/players/{player}', [UserController::class, 'destroy'])->name('admin.player.delete');
             Route::get('/players/ranking', [RankingController::class, 'showRanking'])->name('admin.ranking');
@@ -39,7 +37,7 @@ Route::prefix('v1')->group(function () {
         });
 
         //players
-        Route::middleware('role:player')->group( function () {
+        Route::middleware('role:player')->group(function () {
             Route::get('/players/{player}/games', [GameController::class, 'show'])->name('players.games');
             Route::put('/players/{player}', [UserController::class, 'update'])->name('players.update');
             Route::post('/players/{player}/games', [GameController::class, 'newGame'])->name('players.newGame');
@@ -52,4 +50,4 @@ Route::prefix('v1')->group(function () {
     GET /players/ranking: retorna el rànquing mitjà de tots els jugadors/es del sistema. És a dir, el percentatge mitjà d’èxits.
     GET /players/ranking/loser: retorna el jugador/a amb pitjor percentatge d’èxit.
     GET /players/ranking/winner: retorna el jugador/a amb millor percentatge d’èxit.
-*/ 
+*/

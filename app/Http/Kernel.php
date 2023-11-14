@@ -3,8 +3,6 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Spatie\Permission\Contracts\Role;
-use Spatie\Permission\Models\Role as ModelsRole;
 
 class Kernel extends HttpKernel
 {

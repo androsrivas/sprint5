@@ -2,11 +2,9 @@
 
 namespace App\Listeners;
 
+use App\Events\newGameStarted;
 use App\Models\Game;
 use App\Models\User;
-use App\Events\newGameStarted;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class updateUserWinPercentage
 {
@@ -20,7 +18,7 @@ class updateUserWinPercentage
         $wonGamesFromUser = Game::where(['user_id' => $user->id, 'result' => 7])->count();
         $user->win_percentage = ($wonGamesFromUser / $allGamesFromUser) * 100;
         $user->save();
-        
+
         return $user->win_percentage;
     }
 }

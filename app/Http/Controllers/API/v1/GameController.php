@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Events\NewGameStarted;
-use App\Models\Game;
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GameResource;
+use App\Models\Game;
+use App\Models\User;
 
 class GameController extends Controller
 {
@@ -20,7 +20,7 @@ class GameController extends Controller
         if (auth()->user()->id !== $user->id) {
 
             return response()->json(['message' => 'Unauthorised.'], 401);
-            
+
         } else {
 
             $game = new Game;

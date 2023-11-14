@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RankingResource;
+use App\Models\User;
 
 class RankingController extends Controller
 {
-    public function showWinner() 
+    public function showWinner()
     {
         $winner = User::orderByDesc('win_percentage')->first();
 
