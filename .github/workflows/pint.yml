@@ -23,8 +23,8 @@ jobs:
           skip_fetch: true
       - name: Squash Commits
         run: |
-          git config user.email {{  }}
-          git config user.name {{  }}
+          git config user.email "{{ secrtes.GIT_EMAIL }}"
+          git config user.name "{{  secrets.GIT_NAME }}"
           git checkout develop
           git pull origin develop
           git rebase -i HEAD~n
