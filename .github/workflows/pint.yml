@@ -27,7 +27,7 @@ jobs:
           git config user.name "{{  secrets.GIT_NAME }}"
           git checkout develop
           git pull origin develop
-          git rebase -i HEAD~n
+          git rebase -i HEAD~1
           git rebase -i --root
           sed -i '/PHP Linting (Pint)/s/pick/squash' .git/rebase-merge/git-rebase-todo
           git push origin develop --force
